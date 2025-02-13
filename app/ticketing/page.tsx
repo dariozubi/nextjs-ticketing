@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState } from "react";
 import styled from "styled-components";
-import { INITIAL_SEAT_MAP } from "@/components/constants";
+import { INITIAL_SEAT_MAP, SEAT_PRICE } from "@/components/constants";
 import { Header } from "@/components/Header";
 import { Legend } from "@/components/Legend";
 import { Theater } from "@/components/Theater";
@@ -79,13 +79,25 @@ const TicketingPage = () => {
     }
   };
 
+  const onDetailClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const index = Number(e.currentTarget.getAttribute("data-index"));
+    changeSeat(index, "available");
+    setManuallySelectedSeats((seats) => seats.filter((s) => s === index));
+  };
+
   return (
     <div className="app w-full flex items-center justify-center">
       <Screen theme="dark">
         <Header handleMinus={handleMinus} handlePlus={handlePlus} />
         <Legend available={available.length} selected={selected.length} />
         <Theater seats={seats} onSeatClick={onSeatClick} />
-        <Details />
+        <Details
+          selectedSeats={selected.map((seat) => ({
+            seat,
+            price: SEAT_PRICE,
+          }))}
+          onDetailClick={onDetailClick}
+        />
         <Checkout />
       </Screen>
     </div>
