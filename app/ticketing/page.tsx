@@ -98,7 +98,7 @@ const TicketingPage = () => {
           }))}
           onDetailClick={onDetailClick}
         />
-        <Checkout />
+        <Checkout total={selected.length * SEAT_PRICE} />
       </Screen>
     </div>
   );
