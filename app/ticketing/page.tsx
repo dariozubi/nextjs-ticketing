@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import styled from "styled-components";
 import { INITIAL_SEAT_MAP } from "@/components/constants";
 import { Header } from "@/components/Header";
@@ -20,6 +20,17 @@ import { Checkout } from "@/components/Checkout";
  */
 const TicketingPage = () => {
   const [seats, setSeats] = useState(INITIAL_SEAT_MAP);
+  const [manuallySelectedSeats, setManuallySelectedSeats] = useState<number[]>(
+    []
+  );
+
+  const changeSeat = useCallback((index: number, value: string) => {
+    setSeats((seats) => {
+      const newSeats = [...seats];
+      newSeats[index] = value;
+      return newSeats;
+    });
+  }, []);
 
   const { available, selected } = useMemo(() => {
     const available: number[] = [];
@@ -35,22 +46,36 @@ const TicketingPage = () => {
     if (available.length > 0) {
       const randomSeat =
         available[Math.floor(Math.random() * available.length)];
-      setSeats((seats) => {
-        const newSeats = [...seats];
-        newSeats[randomSeat] = "selected";
-        return newSeats;
-      });
+      changeSeat(randomSeat, "selected");
     }
   };
 
   const handleMinus = () => {
     if (selected.length > 0) {
-      const randomSeat = selected[Math.floor(Math.random() * selected.length)];
-      setSeats((seats) => {
-        const newSeats = [...seats];
-        newSeats[randomSeat] = "available";
-        return newSeats;
-      });
+      const removableSeats = selected.filter(
+        (s) => !manuallySelectedSeats.includes(s)
+      );
+
+      if (removableSeats.length > 0) {
+        const randomSeat =
+          removableSeats[Math.floor(Math.random() * removableSeats.length)];
+        changeSeat(randomSeat, "available");
+      }
+    }
+  };
+
+  const onSeatClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const status = e.currentTarget.getAttribute("data-status");
+    const index = Number(e.currentTarget.getAttribute("data-index"));
+
+    if (status === "available") {
+      changeSeat(index, "selected");
+      setManuallySelectedSeats((seats) => [...seats, index]);
+    }
+
+    if (status === "selected") {
+      changeSeat(index, "available");
+      setManuallySelectedSeats((seats) => seats.filter((s) => s === index));
     }
   };
 
@@ -59,7 +84,7 @@ const TicketingPage = () => {
       <Screen theme="dark">
         <Header handleMinus={handleMinus} handlePlus={handlePlus} />
         <Legend available={available.length} selected={selected.length} />
-        <Theater seats={seats} />
+        <Theater seats={seats} onSeatClick={onSeatClick} />
         <Details />
         <Checkout />
       </Screen>
