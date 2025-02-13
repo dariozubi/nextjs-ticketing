@@ -21,10 +21,44 @@ import { Checkout } from "@/components/Checkout";
 const TicketingPage = () => {
   const [seats, setSeats] = useState(INITIAL_SEAT_MAP);
 
+  const handlePlus = () => {
+    const availableSeats: number[] = [];
+    seats.forEach((s, i) => {
+      if (s === "available") availableSeats.push(i);
+    });
+
+    if (availableSeats.length > 0) {
+      const randomSeat =
+        availableSeats[Math.floor(Math.random() * availableSeats.length)];
+      setSeats((seats) => {
+        const newSeats = [...seats];
+        newSeats[randomSeat] = "selected";
+        return newSeats;
+      });
+    }
+  };
+
+  const handleMinus = () => {
+    const selectedSeats: number[] = [];
+    seats.forEach((s, i) => {
+      if (s === "selected") selectedSeats.push(i);
+    });
+
+    if (selectedSeats.length > 0) {
+      const randomSeat =
+        selectedSeats[Math.floor(Math.random() * selectedSeats.length)];
+      setSeats((seats) => {
+        const newSeats = [...seats];
+        newSeats[randomSeat] = "available";
+        return newSeats;
+      });
+    }
+  };
+
   return (
     <div className="app w-full flex items-center justify-center">
       <Screen theme="dark">
-        <Header />
+        <Header handleMinus={handleMinus} handlePlus={handlePlus} />
         <Legend />
         <Theater seats={seats} />
         <Details />
