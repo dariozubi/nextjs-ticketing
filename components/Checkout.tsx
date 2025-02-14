@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
-export const Checkout = ({ total }: { total: number }) => {
+export const Checkout = () => {
   return (
     <CheckoutContainer>
-      <CheckoutTotal>${total}</CheckoutTotal>
+      <CheckoutTotal>${135}</CheckoutTotal>
       <CheckoutAction>Checkout</CheckoutAction>
     </CheckoutContainer>
   );
