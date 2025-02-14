@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { INITIAL_SEAT_MAP } from "@/components/constants";
 import { Header } from "@/components/Header";
@@ -21,20 +21,15 @@ import { Checkout } from "@/components/Checkout";
 const TicketingPage = () => {
   const [seats, setSeats] = useState(INITIAL_SEAT_MAP);
 
-  const { available, selected } = useMemo(() => {
-    const available: number[] = [];
-    const selected: number[] = [];
-    seats.forEach((s, i) => {
-      if (s === "available") available.push(i);
-      if (s === "selected") selected.push(i);
-    });
-    return { available, selected };
-  }, [seats]);
-
   const handlePlus = () => {
-    if (available.length > 0) {
+    const availableSeats: number[] = [];
+    seats.forEach((s, i) => {
+      if (s === "available") availableSeats.push(i);
+    });
+
+    if (availableSeats.length > 0) {
       const randomSeat =
-        available[Math.floor(Math.random() * available.length)];
+        availableSeats[Math.floor(Math.random() * availableSeats.length)];
       setSeats((seats) => {
         const newSeats = [...seats];
         newSeats[randomSeat] = "selected";
@@ -44,8 +39,14 @@ const TicketingPage = () => {
   };
 
   const handleMinus = () => {
-    if (selected.length > 0) {
-      const randomSeat = selected[Math.floor(Math.random() * selected.length)];
+    const selectedSeats: number[] = [];
+    seats.forEach((s, i) => {
+      if (s === "selected") selectedSeats.push(i);
+    });
+
+    if (selectedSeats.length > 0) {
+      const randomSeat =
+        selectedSeats[Math.floor(Math.random() * selectedSeats.length)];
       setSeats((seats) => {
         const newSeats = [...seats];
         newSeats[randomSeat] = "available";
@@ -58,7 +59,7 @@ const TicketingPage = () => {
     <div className="app w-full flex items-center justify-center">
       <Screen theme="dark">
         <Header handleMinus={handleMinus} handlePlus={handlePlus} />
-        <Legend available={available.length} selected={selected.length} />
+        <Legend />
         <Theater seats={seats} />
         <Details />
         <Checkout />

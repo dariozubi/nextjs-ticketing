@@ -4,12 +4,10 @@ import IconAvailable from "./IconAvailable";
 import IconReserved from "./IconReserved";
 import IconSelected from "./IconSelected";
 
-type Props = {
-  available: number;
-  selected: number;
-};
-
-export const Legend = ({ available, selected }: Props) => {
+/**
+ * Load icon files from svg. There's no need to change this component.
+ */
+export const Legend = () => {
   return (
     <>
       <div style={{ display: "none" }}>
@@ -17,7 +15,7 @@ export const Legend = ({ available, selected }: Props) => {
       </div>
       <LegendContainer>
         <LegendItem>
-          <IconAvailable size={16} number={available} />
+          <IconAvailable size={16} number={5} />
           <LegendItemName>Available</LegendItemName>
         </LegendItem>
         <LegendItem>
@@ -25,7 +23,7 @@ export const Legend = ({ available, selected }: Props) => {
           <LegendItemName>Reserved</LegendItemName>
         </LegendItem>
         <LegendItem>
-          <IconSelected size={16} number={selected} />
+          <IconSelected size={16} number={5} />
           <LegendItemName>Selected</LegendItemName>
         </LegendItem>
       </LegendContainer>
