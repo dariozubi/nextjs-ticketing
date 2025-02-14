@@ -1,21 +1,17 @@
 import styled from "styled-components";
 import { Icon } from "./Icon";
 
-type Props = {
-  handlePlus: () => void;
-  handleMinus: () => void;
-};
-
-export const Header = ({ handlePlus, handleMinus }: Props) => {
+// render the two buttons making use of the Icon component
+export const Header = () => {
+  const buttons = ["plus", "minus"];
   return (
     <HeaderContainer>
       <HeaderTitle>Choose Seats</HeaderTitle>
-      <HeaderButton onClick={handlePlus}>
-        <Icon href="plus" size={28} />
-      </HeaderButton>
-      <HeaderButton onClick={handleMinus}>
-        <Icon href="minus" size={28} />
-      </HeaderButton>
+      {buttons.map((button) => (
+        <HeaderButton key={button}>
+          <Icon href={button} size={28} />
+        </HeaderButton>
+      ))}
     </HeaderContainer>
   );
 };
