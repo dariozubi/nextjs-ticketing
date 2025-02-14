@@ -3,10 +3,8 @@ import { Icon } from "./Icon";
 
 // for each selected seat include a button with the close icon
 export const Details = ({
-  onDetailClick,
   selectedSeats = [],
 }: {
-  onDetailClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   selectedSeats?: { seat: number; price: number }[];
 }) => {
   // in the button include the text in the following format
@@ -17,11 +15,7 @@ export const Details = ({
       {selectedSeats.map((selectedSeat) => {
         const entries = Object.entries(selectedSeat);
         return (
-          <DetailsButton
-            key={entries[0][1]}
-            data-index={entries[0][1]}
-            onClick={onDetailClick}
-          >
+          <DetailsButton key={entries[0][1]} data-index={entries[0][1]}>
             {entries
               .map(([property, value]) => `${property}: ${value}`)
               .join(" ")
